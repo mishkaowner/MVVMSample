@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="vm" type="com.mishkaowner.mvvmsample.MainViewModel"/>
+        <import type="com.mishkaowner.mvvmsample.ViewProviders" />
     </data>
+
     <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,5 +30,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{vm.result}"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            bind:items="@{vm.itemVms}"
+            bind:layout_vertical="@{true}"
+            bind:view_provider="@{ViewProviders.itemListing}"
+            />
     </LinearLayout>
 </layout>

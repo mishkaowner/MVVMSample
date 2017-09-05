@@ -11,10 +11,10 @@ import org.mockito.MockitoAnnotations
 class VmTest {
     @Before
     fun before(){
-        RxJavaPlugins.setIoSchedulerHandler { scheduler -> Schedulers.trampoline() }
-        RxJavaPlugins.setComputationSchedulerHandler { scheduler -> Schedulers.trampoline() }
-        RxJavaPlugins.setNewThreadSchedulerHandler { scheduler -> Schedulers.trampoline() }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler -> Schedulers.trampoline() }
+        RxJavaPlugins.setIoSchedulerHandler { _ -> Schedulers.trampoline() }
+        RxJavaPlugins.setComputationSchedulerHandler { _ -> Schedulers.trampoline() }
+        RxJavaPlugins.setNewThreadSchedulerHandler { _ -> Schedulers.trampoline() }
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { _ -> Schedulers.trampoline() }
         MockitoAnnotations.initMocks(this)
     }
 
