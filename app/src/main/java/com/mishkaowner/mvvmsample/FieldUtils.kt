@@ -19,5 +19,5 @@ fun <T> ObservableField<T>.toObservable(): Observable<T> = Observable.create { e
     e.setCancellable { this@toObservable.removeOnPropertyChangedCallback(callback) }
 }
 
-fun <T> Observable<T>.toField(): ReadOnlyField<T> = ReadOnlyField.create(this)
+fun <T> Observable<T>.toField(): ReadOnlyField<T> = ReadOnlyField.create(this@toField)
 
