@@ -47,6 +47,12 @@ object BindingAdapters {
         recyclerView.adapter = RecyclerViewAdapter(items, viewProvider, defaultBinder)
     }
 
+    /*@JvmStatic
+    @BindingAdapter("list", "view_provider")
+    fun bindRecyclerViewAdapter2(recyclerView: RecyclerView, list: io.reactivex.Observable<List<ViewModel>>, viewProvider: ViewProvider) {
+        recyclerView.adapter = RecyclerViewAdapter2(list, viewProvider, defaultBinder)
+    }*/
+
     @JvmStatic
     @BindingAdapter("layout_vertical")
     fun bindLayoutManager(recyclerView: RecyclerView, vertical: Boolean) {
