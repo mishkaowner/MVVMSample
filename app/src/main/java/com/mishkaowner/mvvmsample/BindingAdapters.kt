@@ -52,7 +52,6 @@ object BindingAdapters {
     @JvmStatic
     @BindingAdapter("items", "view_provider")
     fun <T : ComparableViewModel>bindRecyclerViewAdapter(recyclerView: RecyclerView, items: Observable<List<T>>, viewProvider: ViewProvider) {
-        println("Rebinding adapter")
         recyclerView.adapter = RecyclerViewAdapter(items, viewProvider, defaultBinder)
     }
     /*@JvmStatic

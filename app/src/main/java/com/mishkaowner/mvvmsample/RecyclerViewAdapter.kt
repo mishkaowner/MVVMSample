@@ -1,7 +1,6 @@
 package com.mishkaowner.mvvmsample
 
 import android.databinding.DataBindingUtil
-import android.databinding.ObservableField
 import android.databinding.ViewDataBinding
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -16,26 +15,20 @@ class RecyclerViewAdapter<T : ComparableViewModel>(viewModels: Observable<List<T
                                                    val viewProvider: ViewProvider,
                                                    val viewModelBinder: ViewModelBinder?) : RecyclerView.Adapter<DataBindingViewHolder>() {
 
-    private var currentItems: List<ComparableViewModel> = ArrayList()
+    private var currentItems: MutableList<ComparableViewModel> = ArrayList()
     private val subscriptions = HashMap<RecyclerView.AdapterDataObserver, Disposable>()
-    private var source: Observable<Boolean>? = null
+    private var source: Observable<List<T>>? = null
 
     init {
-        println("recreated")
         source = viewModels
-                .doOnNext({println("Nenenenenee")})
                 .applyObservableScheduler()
                 .doOnNext({
-                    println("applu " + it.size)
                     val diffResult = DiffUtil.calculateDiff(DiffUtilComparable(currentItems, it))
-                    var l = currentItems as ArrayList
-                    l.clear()
-                    l.addAll(it)
+                    currentItems.clear()
+                    currentItems.addAll(it)
                     diffResult.dispatchUpdatesTo(RecyclerViewAdapter@ this)
                 })
-                .map { true }
                 .share()
-                .doOnError({ println("Error $it") })
     }
 
     fun <T> Observable<T>.applyObservableScheduler() = subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())!!

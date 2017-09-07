@@ -12,7 +12,7 @@ class MainViewModel(val name: ObservableField<String> = ObservableField(""),
     init {
         result = edit.toObservable().map { "You typed $it" }.toField()
         items = name.toObservable().map { it.length }.map { length ->
-            val l = ArrayList<ItemViewModel>()
+            val l : MutableList<ItemViewModel> = ArrayList()
             (0..(length % 10)).forEach{
                 val item = ItemViewModel()
                 item.index = it
@@ -22,7 +22,7 @@ class MainViewModel(val name: ObservableField<String> = ObservableField(""),
                 }
                 l.add(item)
             }
-            l as List<ItemViewModel>
+            l
         }
     }
 
