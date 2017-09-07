@@ -2,39 +2,34 @@ package com.mishkaowner.mvvmsample
 
 import android.databinding.ObservableField
 import io.reactivex.Observable
-import io.reactivex.functions.Action
 
-class MainViewModel(val name : ObservableField<String> = ObservableField("Old"),
-                    var result : ObservableField<String> = ObservableField(""),
-                    val edit : ObservableField<String> = ObservableField("")) : ViewModel{
-    @Transient var itemVms: Observable<List<ViewModel>>
-    val items : ObservableField<List<ItemViewModel>> = ObservableField()
-    var list : MutableList<ItemViewModel>
+class MainViewModel(val name: ObservableField<String> = ObservableField(""),
+                    var result: ObservableField<String> = ObservableField(""),
+                    val edit: ObservableField<String> = ObservableField(""))
+    : ViewModel {
+    @Transient var items: Observable<ArrayList<ItemViewModel>>? = null
+    var list : ArrayList<ItemViewModel> = ArrayList()
 
     init {
-        result = edit.toObservable().map{"You typed $it"}.toField()
-        itemVms = Observable.range(0, 100).map{
-            val item = ItemViewModel()
-            item.name = "$it is it"
-            item as ViewModel
-        }.toList().toObservable()
-        list = mutableListOf()
-        items.set(list)
-        val callback = object : android.databinding.Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(observable: android.databinding.Observable, i: Int) {
-                println("PRoperty chanbged")
+        result = edit.toObservable().map { "You typed $it" }.toField()
+        items = name.toObservable().map { it.length }.map{
+            println("Val ${it%10}")
+            if(it > 5) {
+                val item = ItemViewModel()
+                item.name = "New Item $it"
+                item.index = it
+                list.add(0, item)
+            } else {
+                val item = ItemViewModel()
+                item.name = "New Item $it"
+                item.index = it
+                list.add(item)
             }
+            list
         }
-        items.addOnPropertyChangedCallback(callback)
     }
 
-    fun changeName(){
-        println("size of list ${items.get().size} ")
-
-        name.set("New")
-
-        val item = ItemViewModel()
-        item.name = "it"
-        list.add(item)
+    fun changeName() {
+        name.set(name.get() + "1")
     }
 }
