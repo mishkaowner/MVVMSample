@@ -2,30 +2,27 @@ package com.mishkaowner.mvvmsample
 
 import android.databinding.ObservableField
 import io.reactivex.Observable
-
+//TODO I DON'T LIKE THE IDEA of haiving Observable in ViewModel at all....
 class MainViewModel(val name: ObservableField<String> = ObservableField(""),
                     var result: ObservableField<String> = ObservableField(""),
                     val edit: ObservableField<String> = ObservableField(""))
     : ViewModel {
-    @Transient var items: Observable<ArrayList<ItemViewModel>>? = null
-    var list : ArrayList<ItemViewModel> = ArrayList()
+    @Transient var items: Observable<List<ItemViewModel>>? = null //This is stupid...
 
     init {
         result = edit.toObservable().map { "You typed $it" }.toField()
-        items = name.toObservable().map { it.length }.map{
-            println("Val ${it%10}")
-            if(it > 5) {
+        items = name.toObservable().map { it.length }.map { length ->
+            val l = ArrayList<ItemViewModel>()
+            (0..(length % 10)).forEach{
                 val item = ItemViewModel()
-                item.name = "New Item $it"
                 item.index = it
-                list.add(0, item)
-            } else {
-                val item = ItemViewModel()
-                item.name = "New Item $it"
-                item.index = it
-                list.add(item)
+                item.name = "New Item ${item.index}"
+                if(length > 9 && it == length % 10) {
+                    item.name = "Expired Item dear"
+                }
+                l.add(item)
             }
-            list
+            l as List<ItemViewModel>
         }
     }
 

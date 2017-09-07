@@ -33,6 +33,6 @@ class ItemViewModel : ComparableViewModel {
     override fun compareContents(target: ComparableViewModel): Boolean {
         val targetItem = target as ItemViewModel
         println("Comparing content $index ${targetItem.index} $name ${targetItem.name}")
-        return name!!.equals(targetItem.name)
+        return name!! == targetItem.name
     }
 }

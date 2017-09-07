@@ -11,37 +11,31 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
-import java.util.function.Consumer
 
-class RecyclerViewAdapter<T : ComparableViewModel>(viewModels: Observable<ArrayList<T>>,
+class RecyclerViewAdapter<T : ComparableViewModel>(viewModels: Observable<List<T>>,
                                                    val viewProvider: ViewProvider,
                                                    val viewModelBinder: ViewModelBinder?) : RecyclerView.Adapter<DataBindingViewHolder>() {
 
-    private var currentItems: ArrayList<ComparableViewModel> = ArrayList()
+    private var currentItems: List<ComparableViewModel> = ArrayList()
     private val subscriptions = HashMap<RecyclerView.AdapterDataObserver, Disposable>()
     private var source: Observable<Boolean>? = null
 
     init {
         println("recreated")
         source = viewModels
+                .doOnNext({println("Nenenenenee")})
                 .applyObservableScheduler()
-                .map({
+                .doOnNext({
+                    println("applu " + it.size)
                     val diffResult = DiffUtil.calculateDiff(DiffUtilComparable(currentItems, it))
-                    currentItems.clear()
-                    currentItems.addAll(it)
-                    diffResult.dispatchUpdatesTo(RecyclerViewAdapter@this)
-                    /*println("Me called please? ${it.size} ${it.hashCode()}")
-                    val list = ArrayList<ComparableViewModel>()
-                    for(item in it) { list.add(item) }
-                    currentItems = list
-                    *//*diffResult.dispatchUpdatesTo(RecyclerViewAdapter@this)
-                    diffResult*//*
-                    notifyDataSetChanged()*/
-                    true
+                    var l = currentItems as ArrayList
+                    l.clear()
+                    l.addAll(it)
+                    diffResult.dispatchUpdatesTo(RecyclerViewAdapter@ this)
                 })
+                .map { true }
                 .share()
-                .doOnError({println("Error $it")})
+                .doOnError({ println("Error $it") })
     }
 
     fun <T> Observable<T>.applyObservableScheduler() = subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())!!
@@ -70,7 +64,7 @@ class RecyclerViewAdapter<T : ComparableViewModel>(viewModels: Observable<ArrayL
     }
 
     override fun registerAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
-        subscriptions.put(observer, source!!.subscribe())
+        subscriptions.put(observer, source!!.subscribe({}, {println("Errorr $it")}))
         super.registerAdapterDataObserver(observer)
     }
 
