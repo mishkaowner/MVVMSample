@@ -2,6 +2,7 @@ package com.mishkaowner.mvvmsample
 
 import android.databinding.ObservableField
 import io.reactivex.Observable
+
 //TODO I DON'T LIKE THE IDEA of haiving Observable in ViewModel at all....
 class MainViewModel(val name: ObservableField<String> = ObservableField(""),
                     var result: ObservableField<String> = ObservableField(""),
@@ -10,14 +11,15 @@ class MainViewModel(val name: ObservableField<String> = ObservableField(""),
     @Transient var items: Observable<List<ItemViewModel>>? = null //This is stupid...
 
     init {
+        println("BInd!")
         result = edit.toObservable().map { "You typed $it" }.toField()
         items = name.toObservable().map { it.length }.map { length ->
-            val l : MutableList<ItemViewModel> = ArrayList()
-            (0..(length % 10)).forEach{
+            val l: MutableList<ItemViewModel> = ArrayList()
+            (0..(length % 10)).forEach {
                 val item = ItemViewModel()
                 item.index = it
                 item.name = "New Item ${item.index}"
-                if(length > 9 && it == length % 10) {
+                if (length > 9 && it == length % 10) {
                     item.name = "Expired Item dear"
                 }
                 l.add(item)
