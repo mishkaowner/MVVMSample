@@ -1,8 +1,6 @@
 package com.mishkaowner.mvvmsample
 
-import android.databinding.ObservableArrayList
 import android.databinding.ObservableField
-import android.support.v7.view.menu.MenuView
 import com.mishkaowner.mvvmsample.base.ViewModel
 import com.mishkaowner.mvvmsample.base.toField
 import com.mishkaowner.mvvmsample.base.toObservable
@@ -25,14 +23,13 @@ class MainViewModel(val name: ObservableField<String> = ObservableField(""),
                 val item = ItemViewModel()
                 item.index = it
                 item.name = "New Item ${item.index}"
-                if (length % 10 == 3) {
+                if (it % 10 == 3) {
                     item.name = "Expired Item dear"
                 }
                 l.add(item)
             }
             l
         }
-        //result = scrollPos.toObservable().doOnNext{println("Position $it")}.map{ it.toString() }.toField()
     }
 
     fun changeName() {
