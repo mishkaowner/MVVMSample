@@ -1,3 +1,5 @@
 package com.mishkaowner.mvvmsample
 
-interface ViewModel
+interface ViewModel {
+    fun onBind()
+}

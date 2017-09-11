@@ -12,36 +12,34 @@ import java.lang.reflect.ParameterizedType
 
 @Suppress("UNCHECKED_CAST")
 abstract class BaseActivity<T : ViewModel> : AppCompatActivity() {
-    val prefName : String = "MVVM"
-    var viewModel : T? = null
+    private var viewModel : T? = null
 
     abstract fun getLayoutId() : Int
 
-    fun createViewModel() : T?{
+    private fun createViewModel() : T?{
         val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<T>
-        viewModel = vmClass.newInstance()
-        return viewModel
+        return vmClass.newInstance()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ViewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())
-        if (savedInstanceState != null) {
+        viewModel = if (savedInstanceState != null) {
             val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<T>
-            val sharedPreferences : SharedPreferences = getSharedPreferences(prefName, Context.MODE_PRIVATE)
-            val value = sharedPreferences.getString(vmClass.name, "")
-            viewModel = Gson().fromJson<T>(value, vmClass)
+            val value = savedInstanceState.getString(vmClass.name, "")
+            Gson().fromJson<T>(value, vmClass)
         } else {
-            viewModel = createViewModel()
+            println("Create!")
+            createViewModel()
         }
         BindingAdapters.defaultBinder.bind(binding, viewModel)
+        viewModel?.onBind()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<T>
-        val sharedPreferences : SharedPreferences = getSharedPreferences(prefName, Context.MODE_PRIVATE)
         val value = Gson().toJson(viewModel)
-        sharedPreferences.edit().putString(vmClass.name, value).apply()
+        outState.putString(vmClass.name, value)
+        super.onSaveInstanceState(outState)
     }
 }

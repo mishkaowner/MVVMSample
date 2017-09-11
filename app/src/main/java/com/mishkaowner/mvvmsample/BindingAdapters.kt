@@ -19,7 +19,7 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingConversion
-    fun getViewProviderForStaticLayout(layoutId: Int): ViewProvider {
+    fun getViewProviderForStaticLayout(layoutId: Int): ViewProvider? {
         return object : ViewProvider {
             override fun getView(vm: ViewModel): Int {
                 return layoutId
@@ -30,8 +30,8 @@ object BindingAdapters {
     @JvmStatic
     @BindingConversion
     fun toOnClickListener(listener: Action?): View.OnClickListener? {
-        if (listener != null) {
-            return View.OnClickListener {
+        return if (listener != null) {
+            View.OnClickListener {
                 try {
                     listener.run()
                 } catch (e: Exception) {
@@ -39,7 +39,7 @@ object BindingAdapters {
                 }
             }
         } else {
-            return null
+            null
         }
     }
 
@@ -51,8 +51,9 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter("items", "view_provider")
-    fun <T : ComparableViewModel>bindRecyclerViewAdapter(recyclerView: RecyclerView, items: Observable<List<T>>, viewProvider: ViewProvider) {
-        recyclerView.adapter = RecyclerViewAdapter(items, viewProvider, defaultBinder)
+    fun <T : ComparableViewModel>bindRecyclerViewAdapter(recyclerView: RecyclerView, items: Observable<List<T>>?, viewProvider: ViewProvider?) {
+        if(items != null && viewProvider != null)
+            recyclerView.adapter = RecyclerViewAdapter(items, viewProvider, defaultBinder)
     }
     /*@JvmStatic
     @BindingAdapter("list", "view_provider")

@@ -3,25 +3,23 @@ package com.mishkaowner.mvvmsample
 import io.reactivex.functions.Action
 
 
-class ItemViewModel : ComparableViewModel {
-    var index: Int = 0
+class ItemViewModel(var index: Int = 0,
+                    var imageRes: Int = 0,
+                    var name: String? = "")
+    : ComparableViewModel {
+    @Transient var onClicked: Action? = null
+    @Transient var onDetailsClicked: Action? = null
 
-    var imageRes: Int = 0
+    init{
+        this.onClicked = Action { println("Clicked onClicked") }
+        this.onDetailsClicked = Action { println("Clicked onDetailsClicked") }
+    }
 
-    var name: String? = null
-
-    var onClicked: Action? = null
-
-    var onDetailsClicked: Action? = null
+    override fun onBind() {
+    }
 
     fun hasImage(): Boolean {
         return imageRes != 0
-    }
-
-    init {
-        this.name = ""
-        this.onClicked = Action { println("Clicked onClicked") }
-        this.onDetailsClicked = Action { println("Clicked onDetailsClicked") }
     }
 
     override fun compareItem(target: ComparableViewModel): Boolean {
@@ -32,5 +30,9 @@ class ItemViewModel : ComparableViewModel {
     override fun compareContents(target: ComparableViewModel): Boolean {
         val targetItem = target as ItemViewModel
         return name!! == targetItem.name
+    }
+
+    fun onClicked(){
+        println("Clicked item")
     }
 }

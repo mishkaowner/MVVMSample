@@ -5,15 +5,15 @@ import io.reactivex.Observable
 
 //TODO I DON'T LIKE THE IDEA of haiving Observable in ViewModel at all....
 class MainViewModel(val name: ObservableField<String> = ObservableField(""),
-                    var result: ObservableField<String> = ObservableField(""),
-                    val edit: ObservableField<String> = ObservableField(""))
+                         var result: ObservableField<String> = ObservableField(""),
+                         val edit: ObservableField<String> = ObservableField(""))
     : ViewModel {
-    @Transient var items: Observable<List<ItemViewModel>>? = null //This is stupid...
+    @Transient var items: Observable<List<ItemViewModel>>? = null
 
-    init {
-        println("BInd!")
+    override fun onBind() {
+        println("onBind ${name.get()}")
         result = edit.toObservable().map { "You typed $it" }.toField()
-        items = name.toObservable().map { it.length }.map { length ->
+        items = name.toObservable().doOnNext{println("Value name is $it")}.map { it.length }.map { length ->
             val l: MutableList<ItemViewModel> = ArrayList()
             (0..(length % 10)).forEach {
                 val item = ItemViewModel()

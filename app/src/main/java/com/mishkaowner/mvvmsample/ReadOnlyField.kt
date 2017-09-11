@@ -7,7 +7,7 @@ import io.reactivex.disposables.Disposable
 
 class ReadOnlyField<T>() : ObservableField<T>() {
     lateinit var source : Observable<T>
-    val subscriptions = HashMap<android.databinding.Observable.OnPropertyChangedCallback, Disposable>()
+    private val subscriptions = HashMap<android.databinding.Observable.OnPropertyChangedCallback, Disposable>()
 
     companion object {
         fun <U> create(source: Observable<U>): ReadOnlyField<U> {
