@@ -1,4 +1,4 @@
-package com.mishkaowner.mvvmsample
+package com.mishkaowner.mvvmsample.base
 
 import android.support.v7.util.DiffUtil
 

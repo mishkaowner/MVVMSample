@@ -1,8 +1,5 @@
-package com.mishkaowner.mvvmsample
+package com.mishkaowner.mvvmsample.base
 
-import android.app.Activity
-import android.content.Context
-import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle

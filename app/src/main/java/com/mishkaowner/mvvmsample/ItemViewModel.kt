@@ -1,5 +1,6 @@
 package com.mishkaowner.mvvmsample
 
+import com.mishkaowner.mvvmsample.base.ComparableViewModel
 import io.reactivex.functions.Action
 
 

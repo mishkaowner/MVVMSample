@@ -1,6 +1,9 @@
 package com.mishkaowner.mvvmsample
 
 import android.databinding.ObservableField
+import com.mishkaowner.mvvmsample.base.ViewModel
+import com.mishkaowner.mvvmsample.base.toField
+import com.mishkaowner.mvvmsample.base.toObservable
 import io.reactivex.Observable
 
 //TODO I DON'T LIKE THE IDEA of haiving Observable in ViewModel at all....

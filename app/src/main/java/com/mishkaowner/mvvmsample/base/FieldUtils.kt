@@ -1,4 +1,4 @@
-package com.mishkaowner.mvvmsample
+package com.mishkaowner.mvvmsample.base
 
 import android.databinding.Observable.OnPropertyChangedCallback
 import android.databinding.ObservableField

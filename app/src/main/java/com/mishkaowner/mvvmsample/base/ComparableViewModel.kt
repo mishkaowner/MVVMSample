@@ -1,4 +1,4 @@
-package com.mishkaowner.mvvmsample
+package com.mishkaowner.mvvmsample.base
 
 interface ComparableViewModel : ViewModel {
     fun compareItem(target: ComparableViewModel): Boolean

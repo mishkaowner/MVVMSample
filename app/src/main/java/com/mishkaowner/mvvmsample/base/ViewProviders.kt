@@ -1,4 +1,6 @@
-package com.mishkaowner.mvvmsample
+package com.mishkaowner.mvvmsample.base
+
+import com.mishkaowner.mvvmsample.R
 
 object ViewProviders{
     @JvmStatic

@@ -1,12 +1,12 @@
-package com.mishkaowner.mvvmsample
+package com.mishkaowner.mvvmsample.base
 
 import android.databinding.BindingAdapter
 import android.databinding.BindingConversion
-import android.databinding.ObservableField
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.mishkaowner.mvvmsample.*
 import io.reactivex.Observable
 import io.reactivex.functions.Action
 
