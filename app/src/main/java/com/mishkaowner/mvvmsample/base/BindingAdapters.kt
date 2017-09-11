@@ -2,6 +2,7 @@ package com.mishkaowner.mvvmsample.base
 
 import android.databinding.BindingAdapter
 import android.databinding.BindingConversion
+import android.databinding.ObservableField
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -67,4 +68,18 @@ object BindingAdapters {
         val orientation = if (vertical) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL
         recyclerView.layoutManager = LinearLayoutManager(recyclerView.context, orientation, false)
     }
+
+    /*@JvmStatic
+    @BindingAdapter("scroll_position")
+    fun bindScrollPosition(recyclerView: RecyclerView, scrollPosition: ObservableField<Int>) {
+        recyclerView.scrollToPosition(scrollPosition.get())
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if(scrollPosition.get() != dy) {
+                    scrollPosition.set(dy)
+                }
+            }
+        })
+    }*/
 }

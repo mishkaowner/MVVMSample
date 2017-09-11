@@ -1,6 +1,7 @@
 package com.mishkaowner.mvvmsample.base
 
 import android.databinding.Observable.OnPropertyChangedCallback
+import android.databinding.ObservableArrayList
 import android.databinding.ObservableField
 import io.reactivex.Observable
 
@@ -20,4 +21,3 @@ fun <T> ObservableField<T>.toObservable(): Observable<T> = Observable.create { e
 }
 
 fun <T> Observable<T>.toField(): ReadOnlyField<T> = ReadOnlyField.create(this@toField)
-

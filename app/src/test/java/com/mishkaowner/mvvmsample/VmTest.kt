@@ -1,5 +1,6 @@
 package com.mishkaowner.mvvmsample
 
+import com.mishkaowner.mvvmsample.base.toObservable
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
