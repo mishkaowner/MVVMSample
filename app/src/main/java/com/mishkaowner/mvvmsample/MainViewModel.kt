@@ -1,38 +1,50 @@
 package com.mishkaowner.mvvmsample
 
+import android.databinding.ObservableArrayList
 import android.databinding.ObservableField
 import com.mishkaowner.mvvmsample.base.ViewModel
 import com.mishkaowner.mvvmsample.base.toField
 import com.mishkaowner.mvvmsample.base.toObservable
+import com.mishkaowner.mvvmsample.di.MainComponent
+import com.mishkaowner.mvvmsample.di.MainModule
 import io.reactivex.Observable
+import javax.inject.Inject
 
 //TODO I DON'T LIKE THE IDEA of haiving Observable in ViewModel at all....
 class MainViewModel(val name: ObservableField<String> = ObservableField(""),
                     var result: ObservableField<String> = ObservableField(""),
-                    val edit: ObservableField<String> = ObservableField(""))
-    : ViewModel {
+                    val edit: ObservableField<String> = ObservableField(""),
+                    val itemSource: ObservableArrayList<ItemViewModel> = ObservableArrayList())
+    : ViewModel, ItemViewModelListener {
+
+    companion object {
+        @JvmStatic lateinit var component: MainComponent
+    }
+
+    override fun remove(item: ItemViewModel) {
+        itemSource.remove(item)
+    }
+
     @Transient
     var items: Observable<List<ItemViewModel>>? = null
 
     override fun onBind() {
-        println("onBind ${name.get()}")
+        component = MyApp.mainAppComponent.plus(MainModule(this))
+        component.inject(this)
+
         result = edit.toObservable().map { "You typed $it" }.toField()
-        items = name.toObservable().doOnNext { println("Value name is $it") }.map { it.length }.map { length ->
-            val l: MutableList<ItemViewModel> = ArrayList()
-            (0..length).forEach {
-                val item = ItemViewModel()
-                item.index = it
-                item.name = "New Item ${item.index}"
-                if (it % 10 == 3) {
-                    item.name = "Expired Item dear"
-                }
-                l.add(item)
-            }
-            l
-        }
+        items = itemSource.toObservable()
     }
 
     fun changeName() {
-        name.set(name.get() + "1")
+        addItem()
+    }
+
+    private fun addItem(){
+        val item = ItemViewModel()
+        item.index = itemSource.size
+        item.name = "New Item ${item.index}"
+        item.listener = this
+        itemSource.add(item)
     }
 }

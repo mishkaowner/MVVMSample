@@ -45,6 +45,7 @@ class RecyclerViewAdapter<T : ComparableViewModel>(viewModels: Observable<List<T
     override fun onBindViewHolder(holder: DataBindingViewHolder, position: Int) {
         viewModelBinder?.bind(holder.viewBinding, currentItems[position])
         holder.viewBinding.executePendingBindings()
+        currentItems[position].onBind()
     }
 
     override fun onViewRecycled(holder: DataBindingViewHolder?) {

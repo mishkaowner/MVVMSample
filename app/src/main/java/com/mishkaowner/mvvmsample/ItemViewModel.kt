@@ -1,22 +1,22 @@
 package com.mishkaowner.mvvmsample
 
 import com.mishkaowner.mvvmsample.base.ComparableViewModel
-import io.reactivex.functions.Action
+import javax.inject.Inject
 
 
 class ItemViewModel(var index: Int = 0,
                     var imageRes: Int = 0,
+                    var imageUrl: String = "https://source.unsplash.com/user/erondu",
                     var name: String? = "")
     : ComparableViewModel {
-    @Transient var onClicked: Action? = null
-    @Transient var onDetailsClicked: Action? = null
+
+    @Transient @Inject lateinit var listener: ItemViewModelListener
 
     init{
-        this.onClicked = Action { println("Clicked onClicked") }
-        this.onDetailsClicked = Action { println("Clicked onDetailsClicked") }
     }
 
     override fun onBind() {
+        MainViewModel.component.inject(this)
     }
 
     fun hasImage(): Boolean {
@@ -34,6 +34,6 @@ class ItemViewModel(var index: Int = 0,
     }
 
     fun onClicked(){
-        println("Clicked item")
+        listener.remove(this)
     }
 }

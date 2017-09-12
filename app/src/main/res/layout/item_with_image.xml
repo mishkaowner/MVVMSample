@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="vm"
             type="com.mishkaowner.mvvmsample.ItemViewModel" />
     </data>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{vm.onClicked}"
         android:orientation="horizontal">
 
-        <!--<ImageView
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            bind:imageResource="@{vm.imageRes}" />-->
+            bind:glide="@{vm.imageUrl}" />
 
         <TextView
-            android:layout_weight="1"
-            android:paddingLeft="8dp"
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{vm.name}" />
+            android:layout_weight="1"
+            android:paddingLeft="8dp"
+            android:text="@{vm.name}"
+            app:layout_constraintBaseline_toBaselineOf="@id/bt"
+            app:layout_constraintBottom_toBottomOf="@id/img"
+            app:layout_constraintLeft_toLeftOf="parent" />
 
         <Button
+            android:id="@+id/bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{() -> vm.onClicked()}"
-            android:text="item" />
-    </LinearLayout>
+            android:text="item"
+            app:layout_constraintRight_toRightOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 </layout>

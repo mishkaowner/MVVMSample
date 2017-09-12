@@ -2,11 +2,12 @@ package com.mishkaowner.mvvmsample.base
 
 import android.databinding.BindingAdapter
 import android.databinding.BindingConversion
-import android.databinding.ObservableField
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.ImageView
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mishkaowner.mvvmsample.*
 import io.reactivex.Observable
 import io.reactivex.functions.Action
@@ -67,6 +68,14 @@ object BindingAdapters {
     fun bindLayoutManager(recyclerView: RecyclerView, vertical: Boolean) {
         val orientation = if (vertical) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL
         recyclerView.layoutManager = LinearLayoutManager(recyclerView.context, orientation, false)
+    }
+
+    @JvmStatic
+    @BindingAdapter("glide")
+    fun glideLoader(imageView: ImageView?, url: String?) {
+        if(url != null && imageView != null) {
+            GlideApp.with(imageView.context).load(url).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView)
+        }
     }
 
     /*@JvmStatic
