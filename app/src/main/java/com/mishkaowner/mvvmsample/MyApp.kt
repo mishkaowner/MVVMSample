@@ -21,9 +21,5 @@ class MyApp : Application() {
 
     companion object {
         @JvmStatic lateinit var mainAppComponent: AppComponent
-
-        fun get() : AppComponent{
-            return mainAppComponent
-        }
     }
 }
