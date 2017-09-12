@@ -5,9 +5,8 @@ import android.databinding.ObservableField
 import com.mishkaowner.mvvmsample.base.ViewModel
 import com.mishkaowner.mvvmsample.base.toField
 import com.mishkaowner.mvvmsample.base.toObservable
-import com.mishkaowner.mvvmsample.di.MainComponent
-import com.mishkaowner.mvvmsample.di.MainModule
 import io.reactivex.Observable
+import javax.inject.Inject
 
 //TODO I DON'T LIKE THE IDEA of haiving Observable in ViewModel at all....
 class MainViewModel(val name: ObservableField<String> = ObservableField(""),
@@ -16,8 +15,10 @@ class MainViewModel(val name: ObservableField<String> = ObservableField(""),
                     val itemSource: ObservableArrayList<ItemViewModel> = ObservableArrayList())
     : ViewModel, ItemViewModelListener {
 
-    companion object {
-        @JvmStatic lateinit var component: MainComponent
+    @Transient @Inject lateinit var navi : Navigator
+
+    override fun showDetailClicked(index: Int) {
+        navi.showItemDetail(itemSource[index])
     }
 
     override fun remove(item: ItemViewModel) {
@@ -28,9 +29,6 @@ class MainViewModel(val name: ObservableField<String> = ObservableField(""),
     var items: Observable<List<ItemViewModel>>? = null
 
     override fun onBind() {
-        component = MyApp.mainAppComponent.plus(MainModule(this))
-        component.inject(this)
-
         result = edit.toObservable().map { "You typed $it" }.toField()
         items = itemSource.toObservable()
     }

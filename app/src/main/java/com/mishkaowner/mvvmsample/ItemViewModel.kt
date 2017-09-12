@@ -16,7 +16,7 @@ class ItemViewModel(var index: Int = 0,
     }
 
     override fun onBind() {
-        MainViewModel.component.inject(this)
+        MainActivity.component.inject(this)
     }
 
     fun hasImage(): Boolean {
@@ -35,5 +35,9 @@ class ItemViewModel(var index: Int = 0,
 
     fun onClicked(){
         listener.remove(this)
+    }
+
+    fun showDetail(){
+        listener.showDetailClicked(index)
     }
 }

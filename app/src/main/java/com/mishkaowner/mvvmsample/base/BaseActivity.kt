@@ -4,14 +4,16 @@ import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.google.gson.Gson
 import java.lang.reflect.ParameterizedType
+import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
-abstract class BaseActivity<out T : ViewModel> : AppCompatActivity() {
+abstract class BaseActivity<V, T : ViewModel> : AppCompatActivity() {
     private val KEY_IS_RETAINED = "KEY_IS_RETAINED"
 
-    private var viewModel: T? = null
+    @Inject lateinit var viewModel: T
+
+    private var mComponent: V? = null
 
     abstract fun getLayoutId(): Int
 
@@ -20,7 +22,7 @@ abstract class BaseActivity<out T : ViewModel> : AppCompatActivity() {
         return vmClass.newInstance()
     }
 
-    @SuppressWarnings("unchecked")
+    /*@SuppressWarnings("unchecked")
     private fun getViewModel(): T? {
         if (null != viewModel) {
             return viewModel
@@ -32,16 +34,17 @@ abstract class BaseActivity<out T : ViewModel> : AppCompatActivity() {
             newViewModel()
         }
         return viewModel
-    }
+    }*/
 
-    override fun onRetainCustomNonConfigurationInstance(): Any {
-        return getViewModel() ?: Unit
+    override fun onRetainCustomNonConfigurationInstance(): V? {
+        return getComponent()//getViewModel()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ViewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())
-        viewModel = when {
+        inject(getComponent())
+        /*viewModel = when {
             isRetained(savedInstanceState) -> getViewModel()
             savedInstanceState != null -> {
                 val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<T>
@@ -49,19 +52,36 @@ abstract class BaseActivity<out T : ViewModel> : AppCompatActivity() {
                 Gson().fromJson<T>(value, vmClass)
             }
             else -> newViewModel()
-        }
+        }*/
         BindingAdapters.defaultBinder.bind(binding, viewModel)
         if (!isRetained(savedInstanceState)) {
-            viewModel?.onBind()
+            viewModel.onBind()
         }
     }
 
+    private fun getComponent(): V? {
+        if (null != mComponent) {
+            return mComponent
+        }
+        val retainedObject = lastCustomNonConfigurationInstance
+        mComponent = if (retainedObject != null) {
+            retainedObject as V?
+        } else {
+            newComponent()
+        }
+        return mComponent
+    }
+
+    abstract fun newComponent() : V?
+
+    protected abstract fun inject(component: V?)
+
     override fun onSaveInstanceState(outState: Bundle) {
-        val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<T>
+        /*val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<T>
         val value = Gson().toJson(viewModel)
-        outState.putString(vmClass.name, value)
-        outState.putBoolean(KEY_IS_RETAINED, isChangingConfigurations)
+        outState.putString(vmClass.name, value)*/
         super.onSaveInstanceState(outState)
+        outState.putBoolean(KEY_IS_RETAINED, isChangingConfigurations)
     }
 
     private fun isRetained(state: Bundle?): Boolean {

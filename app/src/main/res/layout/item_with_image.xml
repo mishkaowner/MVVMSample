@@ -19,7 +19,8 @@
             android:id="@+id/img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            bind:glide="@{vm.imageUrl}" />
+            bind:glide="@{vm.imageUrl}"
+            android:onClick="@{() -> vm.showDetail()}"/>
 
         <TextView
             android:id="@+id/name"
