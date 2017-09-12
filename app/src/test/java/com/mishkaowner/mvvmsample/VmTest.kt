@@ -23,8 +23,5 @@ class VmTest {
         val vm = MainViewModel()
         vm.edit.set("Hello")
         vm.result.toObservable().test().assertValue("You typed Hello")
-        /*
-        vm.btClicked?.run()
-        vm.name.toObservable().subscribe({ println(it) })*/
     }
 }

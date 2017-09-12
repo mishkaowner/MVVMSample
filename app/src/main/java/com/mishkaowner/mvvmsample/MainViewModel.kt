@@ -8,7 +8,6 @@ import com.mishkaowner.mvvmsample.base.toObservable
 import com.mishkaowner.mvvmsample.di.MainComponent
 import com.mishkaowner.mvvmsample.di.MainModule
 import io.reactivex.Observable
-import javax.inject.Inject
 
 //TODO I DON'T LIKE THE IDEA of haiving Observable in ViewModel at all....
 class MainViewModel(val name: ObservableField<String> = ObservableField(""),
