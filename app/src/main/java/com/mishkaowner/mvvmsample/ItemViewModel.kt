@@ -1,8 +1,7 @@
 package com.mishkaowner.mvvmsample
 
 import com.mishkaowner.mvvmsample.base.ComparableViewModel
-import javax.inject.Inject
-
+import io.reactivex.subjects.PublishSubject
 
 class ItemViewModel(var index: Int = 0,
                     var imageRes: Int = 0,
@@ -10,13 +9,12 @@ class ItemViewModel(var index: Int = 0,
                     var name: String? = "")
     : ComparableViewModel {
 
-    @Transient @Inject lateinit var listener: ItemViewModelListener
+    @Transient var listener: PublishSubject<ItemViewModel>? = null
 
-    init{
+    init {
     }
 
     override fun onBind() {
-        MainActivity.component.inject(this)
     }
 
     fun hasImage(): Boolean {
@@ -33,11 +31,11 @@ class ItemViewModel(var index: Int = 0,
         return name!! == targetItem.name
     }
 
-    fun onClicked(){
-        listener.remove(this)
+    fun onClicked() {
+       listener?.onNext(this)
     }
 
-    fun showDetail(){
-        listener.showDetailClicked(index)
+    fun showDetail() {
+        listener?.onNext(this)
     }
 }

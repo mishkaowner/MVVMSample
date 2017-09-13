@@ -43,6 +43,7 @@
             android:layout_height="match_parent"
             bind:items="@{vm.items}"
             bind:layout_vertical="@{true}"
+            bind:item_listener="@{vm.itemListener}"
             bind:view_provider="@{ViewProviders.itemListing}"/>
     </LinearLayout>
 </layout>

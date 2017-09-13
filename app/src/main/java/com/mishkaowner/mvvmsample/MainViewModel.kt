@@ -6,6 +6,7 @@ import com.mishkaowner.mvvmsample.base.ViewModel
 import com.mishkaowner.mvvmsample.base.toField
 import com.mishkaowner.mvvmsample.base.toObservable
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 //TODO I DON'T LIKE THE IDEA of haiving Observable in ViewModel at all....
@@ -16,6 +17,7 @@ class MainViewModel(val name: ObservableField<String> = ObservableField(""),
     : ViewModel, ItemViewModelListener {
 
     @Transient @Inject lateinit var navi : Navigator
+    @Transient val itemListener : PublishSubject<ItemViewModel> = PublishSubject.create()
 
     override fun showDetailClicked(index: Int) {
         navi.showItemDetail(itemSource[index])
@@ -31,6 +33,7 @@ class MainViewModel(val name: ObservableField<String> = ObservableField(""),
     override fun onBind() {
         result = edit.toObservable().map { "You typed $it" }.toField()
         items = itemSource.toObservable()
+        itemListener.subscribe({println("${it.name}")})
     }
 
     fun changeName() {
@@ -41,7 +44,6 @@ class MainViewModel(val name: ObservableField<String> = ObservableField(""),
         val item = ItemViewModel()
         item.index = itemSource.size
         item.name = "New Item ${item.index}"
-        item.listener = this
         itemSource.add(item)
     }
 }

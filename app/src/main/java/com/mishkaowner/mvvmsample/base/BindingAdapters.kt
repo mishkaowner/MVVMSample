@@ -11,6 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mishkaowner.mvvmsample.*
 import io.reactivex.Observable
 import io.reactivex.functions.Action
+import io.reactivex.subjects.PublishSubject
 
 object BindingAdapters {
     val defaultBinder: ViewModelBinder = object : ViewModelBinder {
@@ -52,10 +53,10 @@ object BindingAdapters {
     }*/
 
     @JvmStatic
-    @BindingAdapter("items", "view_provider")
-    fun <T : ComparableViewModel>bindRecyclerViewAdapter(recyclerView: RecyclerView, items: Observable<List<T>>?, viewProvider: ViewProvider?) {
+    @BindingAdapter("items", "view_provider", "item_listener")
+    fun <T : ComparableViewModel>bindRecyclerViewAdapter(recyclerView: RecyclerView, items: Observable<List<T>>?, viewProvider: ViewProvider?, listener : PublishSubject<T>) {
         if(items != null && viewProvider != null)
-            recyclerView.adapter = RecyclerViewAdapter(items, viewProvider, defaultBinder)
+            recyclerView.adapter = RecyclerViewAdapter(items, viewProvider, listener, defaultBinder)
     }
     /*@JvmStatic
     @BindingAdapter("list", "view_provider")
@@ -74,7 +75,8 @@ object BindingAdapters {
     @BindingAdapter("glide")
     fun glideLoader(imageView: ImageView?, url: String?) {
         if(url != null && imageView != null) {
-            GlideApp.with(imageView.context).load(url).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView)
+            GlideApp.with(imageView.context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView)
+            //GlideApp.with(imageView.context).load(url).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView)
         }
     }
 

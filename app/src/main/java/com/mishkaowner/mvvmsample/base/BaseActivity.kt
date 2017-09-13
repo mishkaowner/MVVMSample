@@ -18,44 +18,15 @@ abstract class BaseActivity<T1, T2 : ViewModel> : AppCompatActivity() {
 
     abstract fun getLayoutId(): Int
 
-    private fun newViewModel(): T2? {
-        val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<T2>
-        return vmClass.newInstance()
-    }
-
-    /*@SuppressWarnings("unchecked")
-    private fun getViewModel(): T? {
-        if (null != viewModel) {
-            return viewModel
-        }
-        val retainedObject = lastCustomNonConfigurationInstance
-        viewModel = if (retainedObject != null) {
-            retainedObject as T
-        } else {
-            newViewModel()
-        }
-        return viewModel
-    }*/
-
     override fun onRetainCustomNonConfigurationInstance(): T1? {
-        return getComponent()//getViewModel()
+        return getComponent()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ViewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())
         inject(getComponent())
-        /*viewModel = when {
-            isRetained(savedInstanceState) -> getViewModel()
-            savedInstanceState != null -> {
-                val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<T>
-                val value = savedInstanceState.getString(vmClass.name, "")
-                Gson().fromJson<T>(value, vmClass)
-            }
-            else -> newViewModel()
-        }*/
-        if (savedInstanceState != null) {
-            println("is it null? ${viewModel == null}")
+        if(!isRetained(savedInstanceState) && savedInstanceState != null) {
             val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<T2>
             val value = savedInstanceState.getString(vmClass.name, "")
             viewModel = Gson().fromJson<T2>(value, vmClass)
@@ -84,10 +55,12 @@ abstract class BaseActivity<T1, T2 : ViewModel> : AppCompatActivity() {
     protected abstract fun inject(component: T1?)
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<T2>
-        val value = Gson().toJson(viewModel)
-        outState.putString(vmClass.name, value)
         outState.putBoolean(KEY_IS_RETAINED, isChangingConfigurations)
+        if(!isChangingConfigurations) {
+            val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<T2>
+            val value = Gson().toJson(viewModel)
+            outState.putString(vmClass.name, value)
+        }
         super.onSaveInstanceState(outState)
     }
 

@@ -5,13 +5,8 @@ import com.mishkaowner.mvvmsample.di.MainComponent
 import com.mishkaowner.mvvmsample.di.MainModule
 
 class MainActivity : BaseActivity<MainComponent, MainViewModel>() {
-    companion object {
-        @JvmStatic lateinit var component: MainComponent
-    }
-
     override fun newComponent(): MainComponent? {
-        component = MyApp.mainAppComponent.plus(MainModule(this))
-        return component
+        return MyApp.mainAppComponent.plus(MainModule(this))
     }
 
     override fun inject(component: MainComponent?) {

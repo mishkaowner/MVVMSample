@@ -10,12 +10,14 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
 class RecyclerViewAdapter<T : ComparableViewModel>(viewModels: Observable<List<T>>,
                                                    val viewProvider: ViewProvider,
+                                                   val listener : PublishSubject<T>,
                                                    val viewModelBinder: ViewModelBinder?) : RecyclerView.Adapter<DataBindingViewHolder>() {
 
-    private var currentItems: MutableList<ComparableViewModel> = ArrayList()
+    private var currentItems: MutableList<T> = ArrayList()
     private val subscriptions = HashMap<RecyclerView.AdapterDataObserver, Disposable>()
     private var source: Observable<List<T>>? = null
 
