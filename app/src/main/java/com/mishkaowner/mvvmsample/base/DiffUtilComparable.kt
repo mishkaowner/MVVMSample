@@ -2,7 +2,7 @@ package com.mishkaowner.mvvmsample.base
 
 import android.support.v7.util.DiffUtil
 
-class DiffUtilComparable<out T : ComparableViewModel>(val oldItems: List<T>, val newItems: List<T>) : DiffUtil.Callback() {
+class DiffUtilComparable<out T : ComparableViewModel>(private val oldItems: List<T>, private val newItems: List<T>) : DiffUtil.Callback() {
     override fun getOldListSize(): Int {
         return oldItems.size
     }

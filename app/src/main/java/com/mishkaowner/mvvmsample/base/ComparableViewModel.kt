@@ -1,8 +1,6 @@
 package com.mishkaowner.mvvmsample.base
 
-import io.reactivex.subjects.PublishSubject
-
-interface ComparableViewModel : ViewModel {
+interface ComparableViewModel {
     fun compareItem(target: ComparableViewModel): Boolean
 
     fun compareContents(target: ComparableViewModel): Boolean

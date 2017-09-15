@@ -24,8 +24,8 @@ abstract class BaseActivity<T1, T2 : ViewModel> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding: ViewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())
         inject(getComponent())
+        val binding: ViewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())
         if(!isRetained(savedInstanceState) && savedInstanceState != null) {
             val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<T2>
             val value = savedInstanceState.getString(vmClass.name, "")

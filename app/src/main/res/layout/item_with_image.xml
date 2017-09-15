@@ -4,10 +4,9 @@
     xmlns:bind="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="vm"
-            type="com.mishkaowner.mvvmsample.ItemViewModel" />
+            type="com.mishkaowner.mvvmsample.MainItemViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -20,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             bind:glide="@{vm.imageUrl}"
+            android:transitionName="url"
             android:onClick="@{() -> vm.showDetail()}"/>
 
         <TextView

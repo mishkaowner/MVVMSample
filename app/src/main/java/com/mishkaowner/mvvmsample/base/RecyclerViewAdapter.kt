@@ -12,9 +12,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class RecyclerViewAdapter<T : ComparableViewModel>(viewModels: Observable<List<T>>,
+class RecyclerViewAdapter<T : ItemViewModel<Pair<T, Int>>>(viewModels: Observable<List<T>>,
                                                    val viewProvider: ViewProvider,
-                                                   val listener : PublishSubject<T>,
+                                                   val listener : PublishSubject<Pair<T, Int>>,
                                                    val viewModelBinder: ViewModelBinder?) : RecyclerView.Adapter<DataBindingViewHolder>() {
 
     private var currentItems: MutableList<T> = ArrayList()
@@ -47,7 +47,7 @@ class RecyclerViewAdapter<T : ComparableViewModel>(viewModels: Observable<List<T
     override fun onBindViewHolder(holder: DataBindingViewHolder, position: Int) {
         viewModelBinder?.bind(holder.viewBinding, currentItems[position])
         holder.viewBinding.executePendingBindings()
-        currentItems[position].onBind()
+        currentItems[position].onBind(listener)
     }
 
     override fun onViewRecycled(holder: DataBindingViewHolder?) {

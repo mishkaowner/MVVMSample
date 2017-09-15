@@ -7,7 +7,7 @@ object ViewProviders{
     fun getItemListing(): ViewProvider {
         return object : ViewProvider {
             override fun getView(vm: ViewModel): Int {
-                /*if (vm is ItemViewModel) {
+                /*if (vm is MainItemViewModel) {
                     return if (vm.hasImage()) R.layout.item_with_image else R.layout.item_with_image
                 }
                 return 0*/

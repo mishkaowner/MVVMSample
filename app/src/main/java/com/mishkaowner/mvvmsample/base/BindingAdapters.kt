@@ -54,10 +54,11 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter("items", "view_provider", "item_listener")
-    fun <T : ComparableViewModel>bindRecyclerViewAdapter(recyclerView: RecyclerView, items: Observable<List<T>>?, viewProvider: ViewProvider?, listener : PublishSubject<T>) {
+    fun <T : ItemViewModel<Pair<T, Int>>>bindRecyclerViewAdapter(recyclerView: RecyclerView, items: Observable<List<T>>?, viewProvider: ViewProvider?, listener : PublishSubject<Pair<T, Int>>) {
         if(items != null && viewProvider != null)
             recyclerView.adapter = RecyclerViewAdapter(items, viewProvider, listener, defaultBinder)
     }
+
     /*@JvmStatic
     @BindingAdapter("list", "view_provider")
     fun bindRecyclerViewAdapter2(recyclerView: RecyclerView, list: io.reactivex.Observable<List<ViewModel>>, viewProvider: ViewProvider) {

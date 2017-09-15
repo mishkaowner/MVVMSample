@@ -1,11 +1,20 @@
 package com.mishkaowner.mvvmsample
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
+import com.mishkaowner.mvvmsample.base.BaseActivity
+import com.mishkaowner.mvvmsample.di.DetailComponent
+import com.mishkaowner.mvvmsample.di.DetailModule
 
-class DetailActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detail)
+class DetailActivity : BaseActivity<DetailComponent, DetailViewModel>() {
+    override fun getLayoutId(): Int {
+        return R.layout.activity_detail
+    }
+
+    override fun newComponent(): DetailComponent? {
+        return MyApp.mainAppComponent.plus(DetailModule(this))
+    }
+
+    override fun inject(component: DetailComponent?) {
+        component?.inject(this)
+        component?.inject(viewModel)
     }
 }

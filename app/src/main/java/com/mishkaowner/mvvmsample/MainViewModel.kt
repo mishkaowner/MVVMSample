@@ -10,30 +10,24 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 //TODO I DON'T LIKE THE IDEA of haiving Observable in ViewModel at all....
-class MainViewModel(val name: ObservableField<String> = ObservableField(""),
-                    var result: ObservableField<String> = ObservableField(""),
-                    val edit: ObservableField<String> = ObservableField(""),
-                    val itemSource: ObservableArrayList<ItemViewModel> = ObservableArrayList())
-    : ViewModel, ItemViewModelListener {
-
+class MainViewModel @Inject constructor() : ViewModel {
+    val name: ObservableField<String> = ObservableField("")
+    var result: ObservableField<String> = ObservableField("")
+    val edit: ObservableField<String> = ObservableField("")
+    val itemSource: ObservableArrayList<MainItemViewModel> = ObservableArrayList()
     @Transient @Inject lateinit var navi : Navigator
-    @Transient val itemListener : PublishSubject<ItemViewModel> = PublishSubject.create()
-
-    override fun showDetailClicked(index: Int) {
-        navi.showItemDetail(itemSource[index])
-    }
-
-    override fun remove(item: ItemViewModel) {
-        itemSource.remove(item)
-    }
-
-    @Transient
-    var items: Observable<List<ItemViewModel>>? = null
+    @Transient @Inject lateinit var itemListener : PublishSubject<Pair<MainItemViewModel, Int>>
+    @Transient var items: Observable<List<MainItemViewModel>>? = null
 
     override fun onBind() {
         result = edit.toObservable().map { "You typed $it" }.toField()
         items = itemSource.toObservable()
-        itemListener.subscribe({println("${it.name}")})
+        itemListener.subscribe({
+            when(it.second){
+                0 -> navi.showItemDetail(it.first, itemSource.indexOf(it.first))
+                else -> itemSource.remove(it.first)
+            }
+        })
     }
 
     fun changeName() {
@@ -41,7 +35,7 @@ class MainViewModel(val name: ObservableField<String> = ObservableField(""),
     }
 
     private fun addItem(){
-        val item = ItemViewModel()
+        val item = MainItemViewModel()
         item.index = itemSource.size
         item.name = "New Item ${item.index}"
         itemSource.add(item)

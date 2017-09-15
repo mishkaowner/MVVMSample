@@ -1,11 +1,12 @@
 package com.mishkaowner.mvvmsample
 
-import android.content.Context
 import android.content.Intent
-import javax.inject.Inject
+import android.support.v4.app.ActivityOptionsCompat
+import com.mishkaowner.mvvmsample.base.Transitionable
 
-class Navigator (val context : Context) {
-    fun showItemDetail(itemViewModel: ItemViewModel?) {
-        context.startActivity(Intent(context, DetailActivity::class.java).putExtra("url", itemViewModel?.imageUrl?:""))
+class Navigator (val trans : Transitionable) {
+    fun showItemDetail(itemViewModel: MainItemViewModel?, index : Int) {
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(trans.getTransitionalContext(), *trans.getTransitionalViews(index))
+        trans.getTransitionalContext()?.startActivity(Intent(trans.getTransitionalContext(), DetailActivity::class.java).putExtra("url", itemViewModel?.imageUrl?:""), options.toBundle())
     }
 }
