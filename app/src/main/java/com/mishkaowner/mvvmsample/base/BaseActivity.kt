@@ -24,11 +24,12 @@ abstract class BaseActivity<T1, T2 : ViewModel> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        inject(getComponent())
         val binding: ViewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())
+        inject(getComponent())
         if(!isRetained(savedInstanceState) && savedInstanceState != null) {
             val vmClass = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<T2>
             val value = savedInstanceState.getString(vmClass.name, "")
+            println("VAule ${value}")
             viewModel = Gson().fromJson<T2>(value, vmClass)
         }
         BindingAdapters.defaultBinder.bind(binding, viewModel)
